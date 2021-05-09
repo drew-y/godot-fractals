@@ -3,16 +3,16 @@ shader_type canvas_item;
 //////////////////////
 // Raymarch Config
 //////////////////////
-uniform int max_steps = 25;
+uniform int max_steps = 100;
 uniform float min_hit_dist = 0.001;
 uniform float max_trace_dist = 200.0;
-uniform float darkness = 12.0;
+uniform float darkness = 35.0;
 
 //////////////////////
 // MandleBulb Config
 //////////////////////
 uniform int mandlebulb_iterations = 15;
-uniform float mandlebulb_sale = 0.5;
+uniform float mandlebulb_sale = 0.3;
 
 vec3 saturate(vec3 color) {
 	return clamp(color, 0.0, 1.0);
@@ -23,7 +23,8 @@ vec2 mandle_bulb_distance(vec3 pos, float time) {
 	vec3 z = pos;
 	float dr = 1.;
 	float r = 0.0;
-    float power = 1.0 + abs(sin(time / 25.0) * 20.0);
+    float power = 1.0 + abs(sin(time / 25.0) * 10.0);
+    // float power = 8.0;
 	
 	int iterations = 0;
 	while (iterations < mandlebulb_iterations) {
@@ -119,10 +120,10 @@ vec3 ray_march(vec3 ray_origin, vec3 ray_dir, vec2 uv, float time) {
 
 void fragment() {
 	// Camera position is also our ray origin
-    vec3 cam_pos = vec3(-8, 0.0, -5.0);
-	vec3 look_at = vec3(1.5, 0.0, 0.0);
+    vec3 cam_pos = vec3(sin(TIME / 20.0) * 5.0, 0, -5.0);
+	vec3 look_at = vec3(0.0, 0.0, 0.0);
 	vec2 uv = UV - vec2(0.5);
-    vec3 ray_dir = get_ray_dir(uv, cam_pos, look_at, 7.0);
+    vec3 ray_dir = get_ray_dir(uv, cam_pos, look_at, 2.0);
 
     // Time varying pixel color
     vec3 col = ray_march(cam_pos, ray_dir, UV, TIME);
